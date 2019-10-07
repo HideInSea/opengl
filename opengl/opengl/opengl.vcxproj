@@ -82,7 +82,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;freetyped.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -127,8 +127,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="BreakOut.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Camera2D.cpp" />
+    <ClCompile Include="Camera3D.cpp" />
+    <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameLevel.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Sprite2D.cpp" />
+    <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Ball.h" />
+    <ClInclude Include="BreakOut.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Camera2D.h" />
+    <ClInclude Include="Camera3D.h" />
+    <ClInclude Include="Cube.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameLevel.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="Sprite2D.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
