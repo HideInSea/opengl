@@ -1,1 +1,3 @@
-opengl/Debug
+opengl/**/Debug/
+
+opengl/.vs/
