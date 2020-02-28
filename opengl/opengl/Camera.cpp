@@ -6,6 +6,14 @@
 Camera::Camera(){
 	this->cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	this->cameraDir = glm::vec3(0);
+	this->cameraFront = glm::vec3(0);
+	this->lastX = 400;
+	this->lastY = 300;
+	this->firstMouse = true;
+	this->yaw = -90.0f;
+	this->pitch = 0;
+	this->fov = 45.0f;
+	this->isPressed = false;
 }
 
 Camera::~Camera()
@@ -16,18 +24,70 @@ void Camera::processInput(GLFWwindow* window)
 {
 	float cameraSpeed = 0.05f; // adjust accordingly
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		this->position += cameraSpeed * cameraDir,this->lockAt(this->target);
+		this->position += cameraSpeed * cameraFront,this->updateView();
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		this->position -= cameraSpeed * cameraDir, this->lockAt(this->target);
+		this->position -= cameraSpeed * cameraFront, this->updateView();
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		this->position += glm::normalize(glm::cross(cameraDir, cameraUp)) * cameraSpeed, this->lockAt(this->target);
+		this->position += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed, this->updateView();
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		this->position -= glm::normalize(glm::cross(cameraDir, cameraUp)) * cameraSpeed, this->lockAt(this->target);
+		this->position -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed, this->updateView();
 }
 
 
 void Camera::lockAt(glm::vec3 target)
 {
-	this->cameraDir = glm::normalize(this->position - this->target);
-	this->view = glm::lookAt(this->position, this->target,this->cameraUp);
+	this->cameraDir = this->position - this->target;
+	this->cameraFront = -this->cameraDir;
+	this->view = glm::lookAt(this->position,position+cameraFront,this->cameraUp);
+}
+
+void Camera::mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (!isPressed)return;
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos;
+	lastX = xpos;
+	lastY = ypos;
+
+	float sensitivity = 0.05;
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+
+	yaw += xoffset;
+	pitch += yoffset;
+
+	if (pitch > 89.0f)
+		pitch = 89.0f;
+	if (pitch < -89.0f)
+		pitch = -89.0f;
+
+	glm::vec3 front;
+	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	front.y = sin(glm::radians(pitch));
+	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	cameraFront = glm::normalize(front);
+	this->updateView();
+}
+
+void Camera::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+}
+
+void Camera::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (action == GLFW_PRESS)isPressed = true,firstMouse=true;
+	else if (action == GLFW_RELEASE)isPressed = false;
+
+}
+
+void Camera::updateView()
+{
+	this->view = glm::lookAt(this->position, position + cameraFront, this->cameraUp);
 }

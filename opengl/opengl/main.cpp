@@ -12,7 +12,9 @@ using namespace std;
 //
 // GLFW function declerations
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 // The Width of the screen
 extern const GLuint SCREEN_WIDTH = 800;
 // The height of the screen
@@ -42,6 +44,10 @@ int main() {
 	glfwMakeContextCurrent(window);
 	//glfwSetKeyCallback(window, key_callback);
 
+	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetMouseButtonCallback(window,mouse_button_callback);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	//获取 opengl 接口地址
 // glad: load all OpenGL function pointers
 // ---------------------------------------
@@ -259,4 +265,18 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//	else if (action == GLFW_RELEASE)
 	//		Breakout.Keys[key] = GL_FALSE;
 	//}
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	direct->mouse_callback(window, xpos, ypos);
+}
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	direct->scroll_callback(window, xoffset, yoffset);
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) 
+{
+	direct->mouse_button_callback(window, button, action, mods);
 }

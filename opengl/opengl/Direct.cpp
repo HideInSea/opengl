@@ -28,7 +28,7 @@ void Direct::init()
 	//this->camera->setPosition(glm::vec3(0,0,10.0f));
 	//this->camera->lockAt(glm::vec3(0,0,0));
 	this->camera=new PerspectiveCamera(45.0f,(float)SCREEN_WIDTH/(float)SCREEN_HEIGHT,0.1f,100.0f);
-	this->camera->setPosition(glm::vec3(0,0,10.0f));
+	this->camera->setPosition(glm::vec3(0,0,5.0f));
 	this->camera->lockAt(glm::vec3(0,0,0));
 	this->render = new Render();
 	this->shader=Loader::GetShader("spriteShader");
@@ -58,3 +58,19 @@ void Direct::processInput(GLFWwindow* window)
 {
 	this->camera->processInput(window);
 }
+
+void Direct::mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	this->camera->mouse_callback(window, xpos, ypos);
+}
+
+void Direct::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	this->camera->scroll_callback(window,xoffset,yoffset);
+}
+
+void Direct::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	this->camera->mouse_button_callback(window, button, action, mods);
+}
+
