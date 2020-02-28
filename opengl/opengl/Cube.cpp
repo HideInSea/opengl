@@ -1,74 +1,75 @@
 #include "Cube.h"
+#include <glm\gtc\matrix_transform.hpp>
 
-Cube::Cube(glm::vec3 position, glm::vec3 size, Shader shader, Texture2D texture) :
-	Node(position)
+Cube::Cube(float x, float y, float z, Texture2D* texture, Shader* shader)
 {
-	this->size = size;
-	this->shader = shader;
 	this->texture = texture;
-	init();
+	this->shader = shader;
+	this->init(x, y, z);
 }
 
 void Cube::draw()
 {
 	glActiveTexture(GL_TEXTURE0);
-	this->texture.Bind();
+	this->texture->Bind();
 	glBindVertexArray(this->VAO);
+	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 }
 
-void Cube::init()
+void Cube::init(float x, float y, float z)
 {
-	float halfX = size.x * 0.5;
-	float halfY = size.y * 0.5;
-	float halfZ = size.z * 0.5;
+	this->length = x;
+	this->width = z;
+	this->height = y;
+	float halfL = x * 0.5;
+	float halfZ = z * 0.5;
+	float halfY = y * 0.5;
+
 	float vertices[] = {
-		//     ---- 位置 ----    - 纹理坐标 -	--法向量--
-		-halfX, -halfY, -halfZ,  0.0f, 0.0f,0.0f, 0.0f, -1.0f,
-		 halfX, -halfY, -halfZ,  1.0f, 0.0f,0.0f, 0.0f, -1.0f,
-		 halfX,  halfY, -halfZ,  1.0f, 1.0f,0.0f, 0.0f, -1.0f,
-		 halfX,  halfY, -halfZ,  1.0f, 1.0f,0.0f, 0.0f, -1.0f,
-		-halfX,  halfY, -halfZ,  0.0f, 1.0f,0.0f, 0.0f, -1.0f,
-		-halfX, -halfY, -halfZ,  0.0f, 0.0f,0.0f, 0.0f, -1.0f,
+	-halfL, -halfY, -halfZ,  0.0f, 0.0f,		//
+	 halfL, -halfY, -halfZ,  1.0f, 0.0f,
+	 halfL,  halfY, -halfZ,  1.0f, 1.0f,
+	 halfL,  halfY, -halfZ,  1.0f, 1.0f,
+	-halfL,  halfY, -halfZ,  0.0f, 1.0f,
+	-halfL, -halfY, -halfZ,  0.0f, 0.0f,
 
-		-halfX, -halfY,  halfZ,  0.0f, 0.0f,0.0f, 0.0f, 1.0f,
-		 halfX, -halfY,  halfZ,  1.0f, 0.0f,0.0f, 0.0f, 1.0f,
-		 halfX,  halfY,  halfZ,  1.0f, 1.0f,0.0f, 0.0f, 1.0f,
-		 halfX,  halfY,  halfZ,  1.0f, 1.0f,0.0f, 0.0f, 1.0f,
-		-halfX,  halfY,  halfZ,  0.0f, 1.0f,0.0f, 0.0f, 1.0f,
-		-halfX, -halfY,  halfZ,  0.0f, 0.0f,0.0f, 0.0f, 1.0f,
+	-halfL, -halfY,  halfZ,  0.0f, 0.0f,
+	 halfL, -halfY,  halfZ,  1.0f, 0.0f,
+	 halfL,  halfY,  halfZ,  1.0f, 1.0f,
+	 halfL,  halfY,  halfZ,  1.0f, 1.0f,
+	-halfL,  halfY,  halfZ,  0.0f, 1.0f,
+	-halfL, -halfY,  halfZ,  0.0f, 0.0f,
 
-		-halfX,  halfY,  halfZ,  1.0f, 0.0f,-1.0f, 0.0f, 0.0f,
-		-halfX,  halfY, -halfZ,  1.0f, 1.0f,-1.0f, 0.0f, 0.0f,
-		-halfX, -halfY, -halfZ,  0.0f, 1.0f,-1.0f, 0.0f, 0.0f,
-		-halfX, -halfY, -halfZ,  0.0f, 1.0f,-1.0f, 0.0f, 0.0f,
-		-halfX, -halfY,  halfZ,  0.0f, 0.0f,-1.0f, 0.0f, 0.0f,
-		-halfX,  halfY,  halfZ,  1.0f, 0.0f,-1.0f, 0.0f, 0.0f,
+	-halfL,  halfY,  halfZ,  1.0f, 0.0f,
+	-halfL,  halfY, -halfZ,  1.0f, 1.0f,
+	-halfL, -halfY, -halfZ,  0.0f, 1.0f,
+	-halfL, -halfY, -halfZ,  0.0f, 1.0f,
+	-halfL, -halfY,  halfZ,  0.0f, 0.0f,
+	-halfL,  halfY,  halfZ,  1.0f, 0.0f,
 
-		 halfX,  halfY,  halfZ,  1.0f, 0.0f,1.0f, 0.0f, 0.0f,
-		 halfX,  halfY, -halfZ,  1.0f, 1.0f,1.0f, 0.0f, 0.0f,
-		 halfX, -halfY, -halfZ,  0.0f, 1.0f,1.0f, 0.0f, 0.0f,
-		 halfX, -halfY, -halfZ,  0.0f, 1.0f,1.0f, 0.0f, 0.0f,
-		 halfX, -halfY,  halfZ,  0.0f, 0.0f,1.0f, 0.0f, 0.0f,
-		 halfX,  halfY,  halfZ,  1.0f, 0.0f,1.0f, 0.0f, 0.0f,
+	 halfL,  halfY,  halfZ,  1.0f, 0.0f,
+	 halfL,  halfY, -halfZ,  1.0f, 1.0f,
+	 halfL, -halfY, -halfZ,  0.0f, 1.0f,
+	 halfL, -halfY, -halfZ,  0.0f, 1.0f,
+	 halfL, -halfY,  halfZ,  0.0f, 0.0f,
+	 halfL,  halfY,  halfZ,  1.0f, 0.0f,
 
-		-halfX, -halfY, -halfZ,  0.0f, 1.0f,0.0f, -1.0f, 0.0f,
-		 halfX, -halfY, -halfZ,  1.0f, 1.0f,0.0f, -1.0f, 0.0f,
-		 halfX, -halfY,  halfZ,  1.0f, 0.0f,0.0f, -1.0f, 0.0f,
-		 halfX, -halfY,  halfZ,  1.0f, 0.0f,0.0f, -1.0f, 0.0f,
-		-halfX, -halfY,  halfZ,  0.0f, 0.0f,0.0f, -1.0f, 0.0f,
-		-halfX, -halfY, -halfZ,  0.0f, 1.0f,0.0f, -1.0f, 0.0f,
+	-halfL, -halfY, -halfZ,  0.0f, 1.0f,
+	 halfL, -halfY, -halfZ,  1.0f, 1.0f,
+	 halfL, -halfY,  halfZ,  1.0f, 0.0f,
+	 halfL, -halfY,  halfZ,  1.0f, 0.0f,
+	-halfL, -halfY,  halfZ,  0.0f, 0.0f,
+	-halfL, -halfY, -halfZ,  0.0f, 1.0f,
 
-		-halfX,  halfY, -halfZ,  0.0f, 1.0f,0.0f, 1.0f, 0.0f,
-		 halfX,  halfY, -halfZ,  1.0f, 1.0f,0.0f, 1.0f, 0.0f,
-		 halfX,  halfY,  halfZ,  1.0f, 0.0f,0.0f, 1.0f, 0.0f,
-		-halfX,  halfY, -halfZ,  0.0f, 1.0f,0.0f, 1.0f, 0.0f,
-		 halfX,  halfY,  halfZ,  1.0f, 0.0f,0.0f, 1.0f, 0.0f,
-		-halfX,  halfY,  halfZ,  0.0f, 0.0f,0.0f, 1.0f, 0.0f,
-
+	-halfL,  halfY, -halfZ,  0.0f, 1.0f,
+	 halfL,  halfY, -halfZ,  1.0f, 1.0f,
+	 halfL,  halfY,  halfZ,  1.0f, 0.0f,
+	 halfL,  halfY,  halfZ,  1.0f, 0.0f,
+	-halfL,  halfY,  halfZ,  0.0f, 0.0f,
+	-halfL,  halfY, -halfZ,  0.0f, 1.0f
 	};
-
 
 	GLuint VBO;
 	glGenVertexArrays(1, &this->VAO);
@@ -81,14 +82,28 @@ void Cube::init()
 
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, false, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, false, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, false, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+}
+
+void Cube::updateModelMatrix()
+{
+	glm::mat4 model(1.0f);
+	model = glm::translate(model,this->position);
+	model = glm::rotate(model, glm::radians(this->angleX), glm::vec3(1.0f, 0,0));
+	model = glm::rotate(model, glm::radians(this->angleY), glm::vec3(0, 1.0f,0));
+	model = glm::rotate(model, glm::radians(this->angleZ), glm::vec3(0, 0,1.0f));
+	model = glm::scale(model, glm::vec3(this->scaleX, this->scaleY, this->scaleZ));
+	this->model = model;
+}
+
+void Cube::setShader(Shader* shader)
+{
+	this->shader = shader;
 }

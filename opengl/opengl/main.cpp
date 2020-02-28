@@ -1,39 +1,14 @@
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <GLFW\glfw3.h>
 #include<iostream>
 #include<fstream>
 #include<sstream>
-#include "Game.h"
-#include "ResourceManager.h"
+#include "Loader.h"
+#include "Direct.h"
+
 using namespace std;
-//
-//#define BUFFER_OFFSET(offset) ((void * )(offset))
-//
-//const int SCR_H = 800;
-//const int SCR_W = 800;
-//const int NumVertices = 6;
-//const GLsizei NumVAOs=2, NumBuffers=2;
-//
-//GLuint VAOs[NumVAOs],Buffers[NumBuffers];
-//GLint ArrayBuffer=0, Triangles=0;
 
-
-
-
-
-//GLuint vPosition=0;
-//
-//struct ShaderInfo {
-//	string vertexShader;
-//	string fragmentShader;
-//};
-//
-//void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-//
-//GLuint LoadShaders(ShaderInfo shaderInfo);
-//void init();
-//void display();
 //
 // GLFW function declerations
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -43,8 +18,8 @@ extern const GLuint SCREEN_WIDTH = 800;
 // The height of the screen
 extern const GLuint SCREEN_HEIGHT = 600;
 
-Game Breakout(SCREEN_WIDTH, SCREEN_HEIGHT);
-
+//Game Breakout(SCREEN_WIDTH, SCREEN_HEIGHT);
+Direct* direct=new Direct();
 
 
 int main() {
@@ -65,7 +40,7 @@ int main() {
 
 
 	glfwMakeContextCurrent(window);
-	glfwSetKeyCallback(window, key_callback);
+	//glfwSetKeyCallback(window, key_callback);
 
 	//获取 opengl 接口地址
 // glad: load all OpenGL function pointers
@@ -84,18 +59,19 @@ int main() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL_TEST);
+
+
 	// Initialize game
-	Breakout.Init();
+	direct->init();
 
 	// DeltaTime variables
 	GLfloat deltaTime = 0.0f;
 	GLfloat lastFrame = 0.0f;
 
 	// Start Game within Menu State
-	Breakout.State = GAME_ACTIVE;
+	//Breakout.State = GAME_ACTIVE;
 
 
-	//init();
 
 
 	while (!glfwWindowShouldClose(window))
@@ -108,24 +84,24 @@ int main() {
 		//update
 				//deltaTime = 0.001f;
 		// Manage user input
-		Breakout.ProcessInput(deltaTime);
+		/*Breakout.ProcessInput(deltaTime);*/
 
-		// Update Game state
-		Breakout.Update(deltaTime);
-
+		//// Update Game state
+		//Breakout.Update(deltaTime);
+		direct->processInput(window);
 
 		// render
 				// Render
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
-		Breakout.Render();
+		direct->mainLoop(deltaTime);
 		//display();
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
 	}
-	ResourceManager::Clear();
+	Loader::Clear();
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
 	glfwTerminate();
@@ -276,11 +252,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	// When a user presses the escape key, we set the WindowShouldClose property to true, closing the application
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
-	if (key >= 0 && key < 1024)
-	{
-		if (action == GLFW_PRESS)
-			Breakout.Keys[key] = GL_TRUE;
-		else if (action == GLFW_RELEASE)
-			Breakout.Keys[key] = GL_FALSE;
-	}
+	//if (key >= 0 && key < 1024)
+	//{
+	//	if (action == GLFW_PRESS)
+	//		Breakout.Keys[key] = GL_TRUE;
+	//	else if (action == GLFW_RELEASE)
+	//		Breakout.Keys[key] = GL_FALSE;
+	//}
 }

@@ -2,17 +2,15 @@
 #include "ResourceManager.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-Sprite2D::Sprite2D(float width, float height, Texture2D texture, Shader spriteShader)
+Sprite2D::Sprite2D(float width, float height, Texture2D* texture2D, Shader* spriteShader):texture(texture2D),shader(spriteShader)
 {
-	this->texture = texture;
-	this->shader = spriteShader;
 	this->init(width, height);
 }
 
 void Sprite2D::draw()
 {
 	glActiveTexture(GL_TEXTURE0);
-	this->texture.Bind();
+	this->texture->Bind();
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
@@ -23,11 +21,11 @@ void Sprite2D::init(float width,float height)
 	this->width = width;
 	this->height = height;
 	//float vertices[] = {
-	//	//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-	//		 0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,   // 右上
-	//		 0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f,   // 右下
-	//		-0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,   // 左下
-	//		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
+	//	//     ---- 位置 ----         - 纹理坐标 -
+	//		 0.5f,  0.5f, 0.0f,      1.0f, 1.0f,   // 右上
+	//		 0.5f, -0.5f, 0.0f,      1.0f, 0.0f,   // 右下
+	//		-0.5f, -0.5f, 0.0f,      0.0f, 0.0f,   // 左下
+	//		-0.5f,  0.5f, 0.0f,      0.0f, 1.0f    // 左上
 	//};
 
 	float vertices[] = {
@@ -69,12 +67,16 @@ void Sprite2D::init(float width,float height)
  
 }
 
-void Sprite2D::updateMatrix()
+void Sprite2D::updateModelMatrix()
 {
-
+	glm::mat4 model(1.0f);
+	model = glm::translate(model,glm::vec3(this->x-this->width*this->anchorX,this->y-this->height*this->anchorY,this->z));
+	model = glm::rotate(model, glm::radians(this->angle), glm::vec3(0, 0, 1.0f));
+	model = glm::scale(model, glm::vec3(this->scaleX,this->scaleY,this->scaleZ));
+	this->model = model;
 }
 
-void Sprite2D::setShader(Shader &shader)
+void Sprite2D::setShader(Shader *shader)
 {
 	this->shader = shader;
 }

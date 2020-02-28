@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -127,36 +127,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Ball.cpp" />
-    <ClCompile Include="BreakOut.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Camera2D.cpp" />
-    <ClCompile Include="Camera3D.cpp" />
     <ClCompile Include="Cube.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameLevel.cpp" />
+    <ClCompile Include="Direct.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Node.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Node2D.cpp" />
+    <ClCompile Include="Node3D.cpp" />
+    <ClCompile Include="OrthographicCamera.cpp" />
+    <ClCompile Include="PerspectiveCamera.cpp" />
+    <ClCompile Include="Loader.cpp" />
+    <ClCompile Include="Render.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Sprite2D.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Ball.h" />
-    <ClInclude Include="BreakOut.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Camera2D.h" />
-    <ClInclude Include="Camera3D.h" />
     <ClInclude Include="Cube.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="GameLevel.h" />
+    <ClInclude Include="Direct.h" />
     <ClInclude Include="Node.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Node2D.h" />
+    <ClInclude Include="Node3D.h" />
+    <ClInclude Include="OrthographicCamera.h" />
+    <ClInclude Include="PerspectiveCamera.h" />
+    <ClInclude Include="Loader.h" />
+    <ClInclude Include="Render.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Sprite2D.h" />
     <ClInclude Include="stb_image.h" />

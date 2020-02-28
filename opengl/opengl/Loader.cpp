@@ -1,47 +1,47 @@
-#include "ResourceManager.h"
+#include "Loader.h"
 #include <iostream>
 #include <sstream>
 #include <fstream>
 
 #include "stb_image.h"
 
-std::map<std::string, Texture2D>    ResourceManager::Textures;
-std::map<std::string, Shader>       ResourceManager::Shaders;
+std::map<std::string, Texture2D*>    Loader::Textures;
+std::map<std::string, Shader*>       Loader::Shaders;
 
-Shader ResourceManager::LoadShader(const GLchar* vShaderFile, const GLchar* fShaderFile, const GLchar* gShaderFile, std::string name)
+Shader* Loader::LoadShader(const GLchar* vShaderFile, const GLchar* fShaderFile, const GLchar* gShaderFile, std::string name)
 {
 	Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
 	return Shaders[name];
 }
 
-Shader  ResourceManager::GetShader(std::string name)
+Shader*  Loader::GetShader(std::string name)
 {
 	return Shaders[name];
 }
 
-Texture2D ResourceManager::LoadTexture(const GLchar* file, GLboolean alpha, std::string name)
+Texture2D* Loader::LoadTexture(const GLchar* file, GLboolean alpha, std::string name)
 {
 	Textures[name] = loadTextureFromFile(file, alpha);
 	return Textures[name];
 }
 
-Texture2D  ResourceManager::GetTexture(std::string name)
+Texture2D*  Loader::GetTexture(std::string name)
 {
-	Texture2D texture = Textures[name];
+	Texture2D* texture = Textures[name];
 	return texture;
 }
 
-void ResourceManager::Clear()
+void Loader::Clear()
 {
 	// (Properly) delete all shaders	
 	for (auto iter : Shaders)
-		glDeleteProgram(iter.second.ID);
+		glDeleteProgram(iter.second->ID);
 	// (Properly) delete all textures
 	for (auto iter : Textures)
-		glDeleteTextures(1, &iter.second.ID);
+		glDeleteTextures(1, &iter.second->ID);
 }
 
-Shader ResourceManager::loadShaderFromFile(const GLchar* vShaderFile, const GLchar* fShaderFile, const GLchar* gShaderFile)
+Shader* Loader::loadShaderFromFile(const GLchar* vShaderFile, const GLchar* fShaderFile, const GLchar* gShaderFile)
 {
 	// 1. Retrieve the vertex/fragment source code from filePath
 	std::string vertexCode;
@@ -80,26 +80,27 @@ Shader ResourceManager::loadShaderFromFile(const GLchar* vShaderFile, const GLch
 	const GLchar* fShaderCode = fragmentCode.c_str();
 	const GLchar* gShaderCode = geometryCode.c_str();
 	// 2. Now create shader object from source code
-	Shader shader;
-	shader.Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
+	Shader* shader=new Shader();
+	shader->Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
 	return shader;
 }
 
-Texture2D ResourceManager::loadTextureFromFile(const GLchar* file, GLboolean alpha)
+Texture2D* Loader::loadTextureFromFile(const GLchar* file, GLboolean alpha)
 {
 	// Create Texture object
-	Texture2D texture;
+	Texture2D* texture=new Texture2D();
 	if (alpha)
 	{
-		texture.Internal_Format = GL_RGBA;
-		texture.Image_Format = GL_RGBA;
+		texture->Internal_Format = GL_RGBA;
+		texture->Image_Format = GL_RGBA;
 	}
 	// Load image
-	int width, height;
+	int width, height,nrChannels;
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* image = stbi_load(file, &width, &height, 0, texture.Image_Format == GL_RGBA ? STBI_rgb_alpha : STBI_rgb);
+	//stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* image = stbi_load(file, &width, &height, &nrChannels, texture->Image_Format== GL_RGBA?STBI_rgb_alpha:STBI_rgb);
 	// Now generate texture
-	texture.Generate(width, height, image);
+	texture->Generate(width, height, image);
 	// And finally free image data
 	stbi_image_free(image);
 	return texture;
