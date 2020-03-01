@@ -25,6 +25,9 @@ public:
 
 	Sprite2D* bg;
 	Cube* cube;
+
+	Cube* ground;
+
 	GLuint VAO;
 	Shader* shader;
 };

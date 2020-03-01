@@ -24,7 +24,7 @@ Camera::~Camera()
 
 void Camera::processInput(GLFWwindow* window)
 {
-	float cameraSpeed = 0.05f; // adjust accordingly
+	float cameraSpeed = 0.1f; // adjust accordingly
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		this->position += cameraSpeed * cameraFront,this->updateView();
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
