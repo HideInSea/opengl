@@ -17,7 +17,7 @@ public:
 	
 private:
 	Shader*  shader;
-	Texture2D*  texture;
+	Texture2D*  diffuseMap;			//Âş·´ÉäÌùÍ¼
 	
 	GLuint VAO;
 };

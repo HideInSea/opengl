@@ -21,6 +21,8 @@ public:
 	glm::vec3 cameraUp;
 	glm::vec3 cameraDir;
 	glm::vec3 cameraFront;
+	glm::vec3 up;
+	glm::vec3 right;
 
 	bool firstMouse;
 	double lastX;

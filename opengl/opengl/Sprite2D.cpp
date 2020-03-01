@@ -2,7 +2,7 @@
 #include "ResourceManager.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-Sprite2D::Sprite2D(float width, float height, Texture2D* texture2D, Shader* spriteShader):texture(texture2D),shader(spriteShader)
+Sprite2D::Sprite2D(float width, float height, Texture2D* texture2D, Shader* spriteShader):diffuseMap(texture2D),shader(spriteShader)
 {
 	this->init(width, height);
 }
@@ -10,7 +10,7 @@ Sprite2D::Sprite2D(float width, float height, Texture2D* texture2D, Shader* spri
 void Sprite2D::draw()
 {
 	glActiveTexture(GL_TEXTURE0);
-	this->texture->Bind();
+	this->diffuseMap->Bind();
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

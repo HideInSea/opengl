@@ -21,6 +21,7 @@ public:
 	Loader* loader;
 	Camera* camera;
 	Render* render;
+	Cube* light;
 
 	Sprite2D* bg;
 	Cube* cube;

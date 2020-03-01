@@ -4,6 +4,8 @@
 
 
 Camera::Camera(){
+	this->up = glm::vec3(0);
+	this->right = glm::vec3(0);
 	this->cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	this->cameraDir = glm::vec3(0);
 	this->cameraFront = glm::vec3(0);
@@ -31,6 +33,15 @@ void Camera::processInput(GLFWwindow* window)
 		this->position += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed, this->updateView();
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		this->position -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed, this->updateView();
+
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		this->position += cameraSpeed * this->up, this->lockAt(target);
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		this->position -= cameraSpeed * this->up, this->lockAt(target);
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		this->position += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed, this->lockAt(target);
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		this->position -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed, this->lockAt(target);
 }
 
 
@@ -38,6 +49,8 @@ void Camera::lockAt(glm::vec3 target)
 {
 	this->cameraDir = this->position - this->target;
 	this->cameraFront = -this->cameraDir;
+	this->right = glm::normalize(glm::cross(cameraFront, cameraUp));
+	this->up = glm::normalize(glm::cross(cameraDir, right));
 	this->view = glm::lookAt(this->position,position+cameraFront,this->cameraUp);
 }
 

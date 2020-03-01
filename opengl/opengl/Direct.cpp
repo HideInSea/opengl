@@ -21,9 +21,12 @@ void Direct::init()
 	Loader::LoadTexture("../texture/face.png", GL_TRUE, "face");
 	Loader::LoadTexture("../texture/background.jpg", GL_TRUE, "background");
 	Loader::LoadTexture("../texture/paddle.png", GL_TRUE, "paddle");
+	Loader::LoadTexture("../texture/container2_specular.png", GL_TRUE, "container2_specular");
+	Loader::LoadTexture("../texture/container2_diffuse.png", GL_TRUE, "container2_diffuse");
 
 	Loader::LoadShader("../shaders/texture2d.vs", "../shaders/texture2d.fs", nullptr, "spriteShader");
 	Loader::LoadShader("../shaders/light.vs", "../shaders/light.fs", nullptr, "lightShader");
+	Loader::LoadShader("../shaders/lightPos.vs", "../shaders/lightPos.fs", nullptr, "lightPosShader");
 	//this->camera=new OrthographicCamera(0, SCREEN_WIDTH,0,SCREEN_HEIGHT,0.1f,100.0f);
 	//this->camera->setPosition(glm::vec3(0,0,10.0f));
 	//this->camera->lockAt(glm::vec3(0,0,0));
@@ -38,14 +41,16 @@ void Direct::init()
 	//this->bg->anchorX = 0;
 	//this->bg->anchorY = 0;
 
-	this->cube = new Cube(1.0f,1.0f,1.0f, Loader::GetTexture("block_solid"), Loader::GetShader("spriteShader"));
-
+	this->cube = new Cube(1.0f,1.0f,1.0f, Loader::GetTexture("container2_diffuse"), Loader::GetTexture("container2_specular"), Loader::GetShader("lightShader"));
+	this->light = new Cube(0.5f,0.5f,0.5f, Loader::GetTexture("block_solid"), Loader::GetTexture("block_solid"), Loader::GetShader("lightPosShader"));
+	this->light->setPosition(glm::vec3(5.0f,2.0f,0.0f));
 }
 
 void Direct::mainLoop(float dt)
 {
 
 	this->render->render(this->cube, this->camera);
+	this->render->render(this->light, camera);
 	//this->shader->Use();
 	//this->shader->SetVector3f("color",glm::vec3(1.0f));
 	//this->shader->SetFloat("opacity",1.0f);
