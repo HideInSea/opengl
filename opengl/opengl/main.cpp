@@ -60,11 +60,16 @@ int main() {
 	//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 		// OpenGL configuration
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_STENCIL_TEST);
+
+
 	//glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_STENCIL_TEST);
+
+	
 
 
 	// Initialize game
@@ -76,8 +81,6 @@ int main() {
 
 	// Start Game within Menu State
 	//Breakout.State = GAME_ACTIVE;
-
-
 
 
 	while (!glfwWindowShouldClose(window))
@@ -113,137 +116,7 @@ int main() {
 	glfwTerminate();
 	return 0;
 }
-//
-//
-//void init() {
-//	static const GLfloat vertices[NumVertices][2] = {
-//		{-0.90,-0.90},//triangle1
-//		{0.85,-0.90},
-//		{-0.90,0.85},
-//		{0.90,-0.85},//triangle2
-//		{0.90,0.90},
-//		{-0.85,0.90}
-//	};
-//
-//	glCreateVertexArrays(NumVAOs,VAOs);
-//	glCreateBuffers(NumBuffers, Buffers);
-//	glNamedBufferStorage(Buffers[ArrayBuffer], sizeof(vertices), vertices, 0);
-//	
-//
-//	ShaderInfo shaders = {
-//		"../shaders/triangles.vs",
-//		"../shaders/triangles.fs",
-//	};
-//
-//	GLuint program = LoadShaders(shaders);
-//	glUseProgram(program);
-//
-//	glBindVertexArray(VAOs[Triangles]);
-//	glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
-//	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-//	glEnableVertexAttribArray(vPosition);
-//}
-//
-//void display() {
-//	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-//	glClear(GL_COLOR_BUFFER_BIT);
-//
-//	glBindVertexArray(VAOs[Triangles]);
-//	glDrawArrays(GL_TRIANGLES,0,NumVertices);
-//}
-//
-//GLuint LoadShaders(ShaderInfo shaderInfo) {
-//	std::string vertexCode;
-//	std::string fragmentCode;
-//	//std::string geometryCode;
-//	std::ifstream vertexShaderFile;
-//	std::ifstream fragmentShaderFile;
-//
-//	vertexShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-//	fragmentShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-//	try
-//	{
-//		// Open files
-//		vertexShaderFile.open(shaderInfo.vertexShader);
-//		fragmentShaderFile.open(shaderInfo.fragmentShader);
-//
-//		std::stringstream vShaderStream, fShaderStream;
-//		// Read file's buffer contents into streams
-//		vShaderStream << vertexShaderFile.rdbuf();
-//		fShaderStream << fragmentShaderFile.rdbuf();
-//		// close file handlers
-//		vertexShaderFile.close();
-//		fragmentShaderFile.close();
-//		// Convert stream into string
-//		vertexCode = vShaderStream.str();
-//		fragmentCode = fShaderStream.str();
-//		// If geometry shader path is present, also load a geometry shader
-//		//if (gShaderFile != nullptr)
-//		//{
-//		//	std::ifstream geometryShaderFile(gShaderFile);
-//		//	std::stringstream gShaderStream;
-//		//	gShaderStream << geometryShaderFile.rdbuf();
-//		//	geometryShaderFile.close();
-//		//	geometryCode = gShaderStream.str();
-//		//}
-//	}
-//	catch (std::exception e)
-//	{
-//		std::cout << "ERROR::SHADER: Failed to read shader files" << std::endl;
-//	}
-//	const GLchar* vShaderCode = vertexCode.c_str();
-//	const GLchar* fShaderCode = fragmentCode.c_str();
-//
-//
-//
-//	//编译顶点着色器
-//	GLuint vShader;
-//	GLint success;
-//	GLchar infoLog[512];
-//	vShader = glCreateShader(GL_VERTEX_SHADER);
-//	glShaderSource(vShader, 1, &vShaderCode, NULL);
-//	glCompileShader(vShader);
-//
-//	glGetShaderiv(vShader, GL_COMPILE_STATUS, &success);
-//
-//	if (!success) {
-//		glGetShaderInfoLog(vShader, 512, NULL, infoLog);
-//		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-//	}
-//	
-//	//编译片段着色器
-//	GLuint fShader;
-//	fShader = glCreateShader(GL_FRAGMENT_SHADER);
-//	glShaderSource(fShader, 1, &fShaderCode, NULL);
-//	glCompileShader(fShader);
-//
-//	glGetShaderiv(fShader, GL_COMPILE_STATUS, &success);
-//
-//	if (!success) {
-//		glGetShaderInfoLog(fShader, 512, NULL, infoLog);
-//		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-//	}
-//
-//	//连接着色器程序
-//	GLuint program;
-//	program = glCreateProgram();
-//	glAttachShader(program, vShader);
-//	glAttachShader(program, fShader);
-//	glLinkProgram(program);
-//	// 打印连接错误（如果有的话）
-//	glGetProgramiv(program, GL_LINK_STATUS, &success);
-//	if (!success)
-//	{
-//		glGetProgramInfoLog(program, 512, NULL, infoLog);
-//		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-//	}
-//
-//	// 删除着色器，它们已经链接到我们的程序中了，已经不再需要了
-//	glDeleteShader(vShader);
-//	glDeleteShader(fShader);
-//
-//	return program;
-//}
+
 //
 ////窗口变化是跟新视口大小
 //void framebuffer_size_callback(GLFWwindow* window, int width, int height)

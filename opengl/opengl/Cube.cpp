@@ -11,6 +11,7 @@ Cube::Cube(float x, float y, float z, Texture2D* diffuseMap,Texture2D * specular
 
 void Cube::draw()
 {
+	shader->SetFloat("material.shininess", 32.0f);
 	shader->SetInteger("material.diffuse", 0);
 	glActiveTexture(GL_TEXTURE0);
 	this->diffuseMap->Bind();

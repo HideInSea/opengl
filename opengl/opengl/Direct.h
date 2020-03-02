@@ -24,7 +24,9 @@ public:
 	Cube* light;
 
 	Sprite2D* bg;
+	Sprite2D* bgTwo;
 	Cube* cube;
+	Cube* twoCube;
 
 	Cube* ground;
 
