@@ -4,7 +4,7 @@
 #include "Render.h"
 #include <GLFW\glfw3.h>
 #include "Cube.h"
-
+#include"Model.h"
 class Direct
 {
 public:
@@ -32,5 +32,6 @@ public:
 
 	GLuint VAO;
 	Shader* shader;
+	Model * model;
 };
 

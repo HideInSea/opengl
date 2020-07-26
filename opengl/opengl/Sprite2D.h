@@ -10,7 +10,6 @@ public:
 	Sprite2D(float width, float height,Texture2D * texture,Shader * spriteShader);
 	void draw();
 	void init(float width,float height);
-  	virtual void updateModelMatrix();
 	void setShader(Shader *shader);
 	Shader* getShader() { return this->shader; };
 	

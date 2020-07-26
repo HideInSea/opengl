@@ -4,7 +4,7 @@
 #include <fstream>
 
 #include "stb_image.h"
-
+using namespace std;
 std::map<std::string, Texture2D*>    Loader::Textures;
 std::map<std::string, Shader*>       Loader::Shaders;
 
@@ -21,6 +21,7 @@ Shader*  Loader::GetShader(std::string name)
 
 Texture2D* Loader::LoadTexture(const GLchar* file, GLboolean alpha, std::string name)
 {
+	cout << "Load texture " << file << endl;
 	Textures[name] = loadTextureFromFile(file, alpha);
 	return Textures[name];
 }

@@ -67,15 +67,6 @@ void Sprite2D::init(float width,float height)
  
 }
 
-void Sprite2D::updateModelMatrix()
-{
-	glm::mat4 model(1.0f);
-	model = glm::translate(model,glm::vec3(this->x-this->width*this->anchorX,this->y-this->height*this->anchorY,this->z));
-	model = glm::rotate(model, glm::radians(this->angle), glm::vec3(0, 0, 1.0f));
-	model = glm::scale(model, glm::vec3(this->scaleX,this->scaleY,this->scaleZ));
-	this->model = model;
-}
-
 void Sprite2D::setShader(Shader *shader)
 {
 	this->shader = shader;

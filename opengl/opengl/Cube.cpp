@@ -104,16 +104,6 @@ void Cube::init(float x, float y, float z)
 
 }
 
-void Cube::updateModelMatrix()
-{
-	glm::mat4 model(1.0f);
-	model = glm::translate(model,this->position);
-	model = glm::rotate(model, glm::radians(this->angleX), glm::vec3(1.0f, 0,0));
-	model = glm::rotate(model, glm::radians(this->angleY), glm::vec3(0, 1.0f,0));
-	model = glm::rotate(model, glm::radians(this->angleZ), glm::vec3(0, 0,1.0f));
-	model = glm::scale(model, glm::vec3(this->scaleX, this->scaleY, this->scaleZ));
-	this->model = model;
-}
 
 void Cube::setShader(Shader* shader)
 {

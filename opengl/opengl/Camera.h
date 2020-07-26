@@ -1,9 +1,9 @@
 #pragma once
-#include "Node3D.h"
+#include "Node.h"
 #include <GLFW\glfw3.h>
 
 class Camera :
-	public Node3D
+	public Node
 {
 public:
 	Camera();
@@ -21,9 +21,11 @@ public:
 	glm::vec3 cameraUp;
 	glm::vec3 cameraDir;
 	glm::vec3 cameraFront;
+	glm::vec3 cameraRight;
 	glm::vec3 up;
 	glm::vec3 right;
 
+	
 	bool firstMouse;
 	double lastX;
 	double lastY;

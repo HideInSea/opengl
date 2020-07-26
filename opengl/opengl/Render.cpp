@@ -2,6 +2,7 @@
 #include "Sprite2D.h"
 #include "Render.h"
 #include "Cube.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 Render::Render()
 {
@@ -14,22 +15,22 @@ Render::~Render()
 void Render::render(Node* node,Camera * camera)
 {
 	
-	Sprite2D* sprite2d = (Sprite2D*)node;
-	//Cube* sprite2d = (Cube*)node;
+	//Sprite2D* sprite2d = (Sprite2D*)node;
+	Cube* sprite2d = (Cube*)node;
  	Shader * shader=sprite2d->getShader();
 	shader->Use();
-	glm::mat4 model = sprite2d->getModelMatrix();
+	glm::mat4 model = sprite2d->getWorldMatrix();
 	glm::mat4 tranform = camera->projection * camera->view* model;
 	
 	shader->SetMatrix4("transform", tranform, GL_FALSE);
-	//shader->SetMatrix4("model",model, GL_FALSE);
+	shader->SetMatrix4("model",model, GL_FALSE);
 	shader->SetVector3f("objectColor", node->color);
 	//shader->SetVector3f("viewPos", camera->position);
 	shader->SetFloat("opacity", node->opacity);
 
-	//////方向光属性
-	//shader->SetVector3f("directLight.ambient", glm::vec3(0.5f));
-	//shader->SetVector3f("directLight.diffuse", glm::vec3(0.5f)); // 将光照调暗了一些以搭配场景
+	////方向光属性
+	//shader->SetVector3f("directLight.ambient", glm::vec3(1.0f));
+	//shader->SetVector3f("directLight.diffuse", glm::vec3(1.0f)); // 将光照调暗了一些以搭配场景
 	//shader->SetVector3f("directLight.specular", glm::vec3(1.0f));
 	//shader->SetVector3f("directLight.direction", glm::vec3(-5.0f, -2.0f, 0.0f));
 	////点光属性
@@ -56,3 +57,43 @@ void Render::render(Node* node,Camera * camera)
 
 	sprite2d->draw();
 }
+
+void Render::renderModel(Model * mode, Camera * camera, Shader * shader)
+{
+	//Sprite2D* sprite2d = (Sprite2D*)node;
+	shader->Use();
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+	glm::mat4 tranform = camera->projection * camera->view* model;
+
+	shader->SetMatrix4("transform", tranform, GL_FALSE);
+	shader->SetMatrix4("model", model, GL_FALSE);
+	mode->Draw(shader);
+}
+
+void Render::renderModelWithLight(Model * mode, Camera * camera, Shader * shader)
+{
+	//Sprite2D* sprite2d = (Sprite2D*)node;
+	shader->Use();
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+	glm::mat4 tranform = camera->projection * camera->view* model;
+
+	shader->SetMatrix4("transform", tranform, GL_FALSE);
+	//shader->SetMatrix4("model", model, GL_FALSE);
+	//设置方向光
+	////方向光属性
+	shader->SetVector3f("light.ambient", glm::vec3(0.3f));
+	shader->SetVector3f("light.diffuse", glm::vec3(0.6f)); // 将光照调暗了一些以搭配场景
+	shader->SetVector3f("light.specular", glm::vec3(1.0f));
+	shader->SetVector3f("light.direction", glm::vec3(-5.0f, -2.0f, 0.0f));
+
+
+	shader->SetVector3f("viewPos", camera->position);
+
+	mode->Draw(shader);
+}
+
+

@@ -1,6 +1,7 @@
-#include "Direct.h"
+#include"Direct.h"
 #include"OrthographicCamera.h"
 #include"PerspectiveCamera.h"
+
 
 extern const GLuint SCREEN_WIDTH;
 extern const GLuint SCREEN_HEIGHT;
@@ -31,25 +32,28 @@ void Direct::init()
 	Loader::LoadShader("../shaders/multiLight.vs", "../shaders/multiLight.fs", nullptr, "multiLight");
 	Loader::LoadShader("../shaders/frameShader.vs", "../shaders/frameShader.fs", nullptr, "frameShader");
 	Loader::LoadShader("../shaders/lightPos.vs", "../shaders/lightPos.fs", nullptr, "lightPosShader");
-	this->camera=new OrthographicCamera(0, SCREEN_WIDTH,0,SCREEN_HEIGHT,0.1f,100.0f);
+	Loader::LoadShader("../shaders/texture3d.vs", "../shaders/texture3d.fs", nullptr, "texture3dShader");
+	/*this->camera=new OrthographicCamera(0, SCREEN_WIDTH,0,SCREEN_HEIGHT,0.1f,100.0f);
 	this->camera->setPosition(glm::vec3(0,0,10.0f));
-	this->camera->lockAt(glm::vec3(0,0,0));
-	//this->camera=new PerspectiveCamera(45.0f,(float)SCREEN_WIDTH/(float)SCREEN_HEIGHT,0.1f,100.0f);
-	//this->camera->setPosition(glm::vec3(0,5.0f,10.0f));
-	//this->camera->lockAt(glm::vec3(0,0,0));
-	//this->render = new Render();
-	//this->shader=Loader::GetShader("spriteShader");
-
-	this->bg= new Sprite2D(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5, Loader::GetTexture("face"), Loader::GetShader("spriteShader"));
-	this->bgTwo= new Sprite2D(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5, Loader::GetTexture("block_solid"), Loader::GetShader("spriteShader"));
+	this->camera->lockAt(glm::vec3(0,0,0));*/
+	this->camera=new PerspectiveCamera(45.0f,(float)SCREEN_WIDTH/(float)SCREEN_HEIGHT,0.1f,100.0f);
+	this->camera->setPosition(glm::vec3(0,10.0f,20.0f));
+	this->camera->lockAt(glm::vec3(0,10.0f,0.0f));
+	this->render = new Render();
+	//this->shader=Loader::GetShader("texture3dShader");
+	this->shader=Loader::GetShader("directionLight");
+	//this->model = new Model("../models/IronMan/IronMan.obj");
+	this->model = new Model("../models/nanosuit/nanosuit.obj");
+	//this->bg= new Sprite2D(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5, Loader::GetTexture("face"), Loader::GetShader("spriteShader"));
+	//this->bgTwo= new Sprite2D(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5, Loader::GetTexture("block_solid"), Loader::GetShader("spriteShader"));
 	////this->sprite = new Sprite2D(SCREEN_WIDTH, SCREEN_HEIGHT, Loader::GetTexture("background"), Loader::GetShader("spriteShader"));
-	this->bg->anchorX = 0;
-	this->bg->anchorY = 0;
-	this->bgTwo->anchorX = 0;
-	this->bgTwo->anchorY = 0;
-	this->bgTwo->setPosition(glm::vec3(100.0f,100.0f,0.0f));
-	this->bgTwo->angle = 45.0f;
-	//this->cube = new Cube(1.0f,1.0f,1.0f, Loader::GetTexture("container2_diffuse"), Loader::GetTexture("container2_specular"), Loader::GetShader("multiLight"));
+	//this->bg->anchorX = 0;
+	//this->bg->anchorY = 0;
+	//this->bgTwo->anchorX = 0;
+	//this->bgTwo->anchorY = 0;
+	//this->bgTwo->setPosition(glm::vec3(100.0f,100.0f,0.0f));
+	//this->bgTwo->angle = 45.0f;
+	//this->cube = new Cube(1.0f,1.0f,1.0f, Loader::GetTexture("container2_diffuse"), Loader::GetTexture("container2_specular"), Loader::GetShader("texture3dShader"));
 
 
 	//this->light = new Cube(0.5f,0.5f,0.5f, Loader::GetTexture("block_solid"), Loader::GetTexture("block_solid"), Loader::GetShader("lightPosShader"));
@@ -69,9 +73,11 @@ void Direct::mainLoop(float dt)
 	//this->cube->scaleY = 1.0f;
 	//this->cube->scaleZ = 1.0f;
 	//this->cube->setShader(Loader::GetShader("multiLight"));
-	this->render->render(this->bg, this->camera);
-	this->render->render(this->bgTwo, this->camera);
-	
+	//this->render->render(this->bg, this->camera);
+	//this->render->render(this->bgTwo, this->camera);
+
+	//this->render->renderModel(model, camera, shader);
+	this->render->renderModelWithLight(model, camera, shader);
 	//////»æÖÆÂÖÀª
 	//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 	//glStencilMask(0x00);
@@ -117,4 +123,3 @@ void Direct::mouse_button_callback(GLFWwindow* window, int button, int action, i
 {
 	this->camera->mouse_button_callback(window, button, action, mods);
 }
-

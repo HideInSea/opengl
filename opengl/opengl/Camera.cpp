@@ -24,34 +24,40 @@ Camera::~Camera()
 
 void Camera::processInput(GLFWwindow* window)
 {
-	float cameraSpeed = 0.1f; // adjust accordingly
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		this->position += cameraSpeed * cameraFront,this->updateView();
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		this->position -= cameraSpeed * cameraFront, this->updateView();
+	float cameraSpeed = 0.3f; // adjust accordingly
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		this->position -= cameraSpeed * glm::normalize(cameraDir),this->updateView();
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+		this->position += cameraSpeed * glm::normalize(cameraDir), this->updateView();
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		this->position += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed, this->updateView();
+		this->position -= this->cameraRight * cameraSpeed, this->updateView();
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		this->position -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed, this->updateView();
+		this->position += this->cameraRight * cameraSpeed, this->updateView();
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		this->position += this->cameraUp * cameraSpeed, this->updateView();
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		this->position -= this->cameraUp * cameraSpeed, this->updateView();
+	
 
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		this->position += cameraSpeed * this->up, this->lockAt(target);
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		this->position -= cameraSpeed * this->up, this->lockAt(target);
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		this->position += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed, this->lockAt(target);
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		this->position -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed, this->lockAt(target);
+
+	//if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	//	this->position += cameraSpeed * this->up, this->lockAt(target);
+	//if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	//	this->position -= cameraSpeed * this->up, this->lockAt(target);
+	//if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+	//	this->position += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed, this->lockAt(target);
+	//if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+	//	this->position -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed, this->lockAt(target);
 }
 
 
 void Camera::lockAt(glm::vec3 target)
 {
+	this->target = target;
 	this->cameraDir = this->position - this->target;
-	this->cameraFront = -this->cameraDir;
-	this->right = glm::normalize(glm::cross(cameraFront, cameraUp));
-	this->up = glm::normalize(glm::cross(cameraDir, right));
-	this->view = glm::lookAt(this->position,position+cameraFront,this->cameraUp);
+	this->cameraRight = glm::normalize(glm::cross(glm::vec3(0,1.0f,0),this->cameraDir));
+	this->cameraUp = glm::normalize(glm::cross(this->cameraDir,this->cameraRight));
+	this->view = glm::lookAt(this->position,this->target,glm::vec3(0,1.0f,0));
 }
 
 void Camera::mouse_callback(GLFWwindow* window, double xpos, double ypos)
@@ -85,7 +91,7 @@ void Camera::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	front.y = sin(glm::radians(pitch));
 	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	cameraFront = glm::normalize(front);
+	this->cameraDir = -glm::normalize(front);
 	this->updateView();
 }
 
@@ -102,5 +108,6 @@ void Camera::mouse_button_callback(GLFWwindow* window, int button, int action, i
 
 void Camera::updateView()
 {
-	this->view = glm::lookAt(this->position, position + cameraFront, this->cameraUp);
+	this->target = this->position - this->cameraDir;
+	this->view = glm::lookAt(this->position,this->target, glm::vec3(0,1.0f,0));
 }

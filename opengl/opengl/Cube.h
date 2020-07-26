@@ -10,7 +10,6 @@ public:
 	~Cube() {};
 	void draw();
 	void init(float x, float y,float z);
-	virtual void updateModelMatrix();
 	void setShader(Shader* shader);
 	Shader* getShader() { return this->shader; };
 	
